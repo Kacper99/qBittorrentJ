@@ -1,15 +1,15 @@
 package io.github.kacper99.qbittorrentj;
 
-import io.github.kacper99.qbittorrentj.groups.TransferInfo;
 import io.github.kacper99.qbittorrentj.okhttp.SimpleCookieJar;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.function.Function;
 import okhttp3.*;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class QBittorrent {
     private final OkHttpClient httpClient =
-            new OkHttpClient.Builder().cookieJar(SimpleCookieJar.getInstance()).build();
+            new OkHttpClient.Builder().cookieJar(SimpleCookieJar.getInstance()).addInterceptor(new HttpLoggingInterceptor()).build();
     private final String qBittorrentWebUiUrl;
 
     public QBittorrent(final String qBittorrentWebUiUrl) {

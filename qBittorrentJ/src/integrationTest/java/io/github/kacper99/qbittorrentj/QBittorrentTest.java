@@ -27,7 +27,10 @@ class QBittorrentTest {
         final var loggedIn = qBittorrent.login("admin", "adminadmin");
 
         assertThat(loggedIn).isTrue();
-        assertThat(qBittorrent.transferInfo().getDownloadSpeedLimit()).isNotNegative();
-        assertThat(qBittorrent.transferInfo().getUploadSpeedLimit()).isNotNegative();
+
+        final var transferInfo = qBittorrent.transferInfo();
+
+        transferInfo.setDownloadSpeedLimit(100000);
+        assertThat(transferInfo.getDownloadSpeedLimit()).isEqualTo(100000);
     }
 }
