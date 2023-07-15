@@ -1,7 +1,3 @@
-plugins {
-    `library-conventions`
-}
+plugins { `library-conventions` }
 
-dependencies {
-    implementation(libs.okhttp)
-}
+dependencies { implementation(libs.okhttp) }
