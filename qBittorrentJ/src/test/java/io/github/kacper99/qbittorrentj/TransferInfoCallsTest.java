@@ -1,13 +1,12 @@
 package io.github.kacper99.qbittorrentj;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 @WireMockTest
 class TransferInfoCallsTest {
@@ -27,4 +26,11 @@ class TransferInfoCallsTest {
                 .withRequestBody(matching("limit=30720")));
     }
 
+    @Test
+    void settingDownloadLimit() throws IOException {
+        transferInfo.setDownloadSpeedLimit(20);
+
+        verify(postRequestedFor(urlEqualTo("/api/v2/transfer/setDownloadLimit"))
+                .withRequestBody(matching("limit=20480")));
+    }
 }
