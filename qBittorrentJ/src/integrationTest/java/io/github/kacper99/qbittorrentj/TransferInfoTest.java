@@ -2,31 +2,27 @@ package io.github.kacper99.qbittorrentj;
 
 import static org.assertj.core.api.Assertions.*;
 
+import io.github.kacper99.qbittorrentj.testcontainers.QBittorrentTestContainer;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-/**
- * For these tests to run you currently need to spin up the qbittorrent container in the docker compose file.
- */
+@Testcontainers
 class TransferInfoTest {
+    @Container
+    private static final QBittorrentTestContainer qBittorrentContainer = new QBittorrentTestContainer();
 
-    // TODO: Currently the test container keeps giving unathorized, believe its to do with the mapped port being
-    // different to the exposed one.
-    //    @Container
-    //    GenericContainer qbittorentContainer = new GenericContainer(
-    //                    DockerImageName.parse("lscr.io/linuxserver/qbittorrent:latest"))
-    //            .withExposedPorts(8080)
-    //            .withClasspathResourceMapping("/qbittorrent", "/config", BindMode.READ_ONLY)
-    //            .withEnv(Map.of("TZ", "Etc/UTC", "WEBUI_PORT", "8080"));
-
-    private static final QBittorrent qBittorrent = new QBittorrent("http://localhost:8080");
-    final TransferInfo transferInfo = qBittorrent.transferInfo();
+    private static TransferInfo transferInfo;
 
     @BeforeAll
-    public static void beforeAll() {
+    static void beforeAll() {
+        final var qBittorrent = new QBittorrent(qBittorrentContainer.webUiUrl());
         final var loggedIn = qBittorrent.login("admin", "adminadmin");
+
         assertThat(loggedIn).isTrue();
+        transferInfo = qBittorrent.transferInfo();
     }
 
     @Test
